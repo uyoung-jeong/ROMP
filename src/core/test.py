@@ -1,4 +1,5 @@
 from base import *
+from tqdm import tqdm
 
 class Demo(Base):
     def __init__(self):
@@ -22,9 +23,9 @@ class Demo(Base):
         print('Processing {}, saving to {}'.format(image_folder, self.output_dir))
         os.makedirs(self.output_dir, exist_ok=True)
         if '-1' not in self.gpu:
-            self.visualizer.result_img_dir = self.output_dir 
+            self.visualizer.result_img_dir = self.output_dir
         counter = Time_counter(thresh=1)
-            
+
         internet_loader = self._create_single_data_loader(dataset='internet',train_flag=False, image_folder=image_folder)
         counter.start()
         with torch.no_grad():
@@ -32,7 +33,7 @@ class Demo(Base):
                 outputs = self.net_forward(meta_data, cfg=self.demo_cfg)
                 reorganize_idx = outputs['reorganize_idx'].cpu().numpy()
                 counter.count()
-                
+
                 if self.save_dict_results:
                     self.reorganize_results(outputs, outputs['meta_data']['imgpath'], reorganize_idx, self.output_dir)
                 if self.save_visualization_on_img:
@@ -42,10 +43,10 @@ class Demo(Base):
 
                 if self.save_mesh:
                     save_meshes(reorganize_idx, outputs, self.output_dir, self.smpl_faces)
-                
+
                 if test_iter%50==0:
                     print(test_iter,'/',len(internet_loader))
-                counter.start()   
+                counter.start()
 
     def reorganize_results(self, outputs, img_paths, reorganize_idx, test_save_dir=None):
         results = {}
@@ -103,8 +104,10 @@ class Demo(Base):
             self.output_dir = video_file_path.replace(os.path.basename(video_file_path),'')
 
         results, result_frames = {}, []
-        for frame_id in range(video_length):
-            print('Processing video {}/{}'.format(frame_id, video_length))
+        pbar = tqdm(range(video_length),desc=f'0/{video_length}')
+        for frame_id in pbar:
+            #print('Processing video {}/{}'.format(frame_id, video_length))
+            pbar.set_description(f'{frame_id}/{video_length}')
             frame = capture.read()
             with torch.no_grad():
                 outputs = self.single_image_forward(frame)
@@ -118,7 +121,7 @@ class Demo(Base):
             outputs['meta_data']['imgpath'] = img_paths
             if self.save_mesh:
                 save_meshes(outputs['reorganize_idx'].cpu().numpy(), outputs, self.output_dir, self.smpl_faces)
-        
+
         if self.save_dict_results:
             save_dict_path = os.path.join(self.output_dir, video_basename+'_results.npz')
             print('Saving parameter results to {}'.format(save_dict_path))
@@ -128,14 +131,14 @@ class Demo(Base):
             video_save_name = os.path.join(self.output_dir, video_basename+'_results.mp4')
             print('Writing results to {}'.format(video_save_name))
             frames2video(result_frames, video_save_name, fps=args().fps_save)
-            
+
     def webcam_run_local(self, video_file_path=None):
         '''
         20.9 FPS of forward prop. on 1070Ti
         '''
         print('run on local')
         import keyboard
-        from utils.demo_utils import OpenCVCapture, Image_Reader 
+        from utils.demo_utils import OpenCVCapture, Image_Reader
         if 'tex' in args().webcam_mesh_color:
             from utils.demo_utils import vedo_visualizer as Visualizer
         else:
@@ -153,7 +156,7 @@ class Demo(Base):
             frame = capture.read()
             if frame is None:
                 continue
-            
+
             counter.start()
             with torch.no_grad():
                 outputs = self.single_image_forward(frame)

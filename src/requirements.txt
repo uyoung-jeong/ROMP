@@ -19,3 +19,10 @@ transforms3d
 bvhtoolbox
 smplx
 vedo
+h5py
+torch
+torchvision
+numba
+yaml
+future_fstrings
+bpy
