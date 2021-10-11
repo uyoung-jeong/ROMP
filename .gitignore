@@ -1,11 +1,7 @@
 demo/videos
 demo/animation
-demo/images_results
-demo/000003*
+demo/*_results
 trained_models
-models/smplx
-models/smpl
-src/configs/active_*.yaml
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -13,5 +9,8 @@ __pycache__/
 *.mp4
 *.npz
 *.fbx
+*.zip
 .vscode
-src/utils/bvh_utils.py
+model_data/
+active_configs
+romp/lib/models/nvxia.py
