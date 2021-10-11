@@ -3,7 +3,7 @@ ARGS:
  eval_dataset: 'pw3d_test'
  GPUS: 0
  model_version: 1
- 
+
  val_batch_size: 64
  nw_eval: 2
  eval: True
@@ -17,6 +17,6 @@ ARGS:
  model_precision: 'fp32'
 
  old_version: True
- gmodel_path: ../trained_models/ROMP_hrnet32.pkl #  '../trained_models/ROMP_resnet50.pkl'
- dataset_rootdir: '/media/yusun/Extreme SSD/dataset/3DPW' #'/path/to/dataset/3DPW'
- annot_dir: '/home/yusun/ROMP_EVAL/data/vibe_db' #'/path/to/vibe_db where 3dpw_test_db.pt located'
+ gmodel_path: ''/home/uyoung/human_pose_estimation/ROMP/trained_models/ROMP_hrnet32.pkl' #  '../trained_models/ROMP_resnet50.pkl'
+ dataset_rootdir: '/syn_mnt/uyoung/human/3DPW' #'/path/to/dataset/3DPW'
+ annot_dir: '/syn_mnt/uyoung/human/VIBE/data/vibe_db' #'/path/to/vibe_db where 3dpw_test_db.pt located'

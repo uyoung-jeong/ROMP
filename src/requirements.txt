@@ -23,6 +23,5 @@ h5py
 torch
 torchvision
 numba
-yaml
+pyyaml
 future_fstrings
-bpy
