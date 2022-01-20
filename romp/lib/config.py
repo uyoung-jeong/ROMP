@@ -40,11 +40,14 @@ def parse_args(input_args=None):
     parser.add_argument('--interactive_vis',action='store_true',help = 'whether to show the results in an interactive mode')
     parser.add_argument('--show_largest_person_only',action='store_true',help = 'whether to only show the results of the largest person in the image')
     parser.add_argument('--show_mesh_stand_on_image',action='store_true',help = 'whether to show the estimated meshes standing on the image')
+    parser.add_argument('--soi_camera', type = str, default = 'far', help = 'camera mode of show_mesh_stand_on_image: far / close')
     parser.add_argument('--make_tracking',action='store_true',help = 'whether to make tracking')
     parser.add_argument('--temporal_optimization',action='store_true',help = 'whether to optimize the temporal smoothness')
     parser.add_argument('--save_dict_results',action='store_true',help = 'whether to save the predictions to a dict (.npz)')
     parser.add_argument('--save_visualization_on_img',action='store_true',help = 'whether to rendering the mesh back to image, which is time consuming')
     parser.add_argument('--fps_save', type = int, default = 24, help = 'the fps of the save video')
+    parser.add_argument('--character', type = str, default = 'smpl', help = 'character: smpl / nvxia')
+    parser.add_argument('--renderer', type = str, default = 'pytorch3d', help = 'character: pytorch3d / pyrender')
     parser.add_argument('-f', type = str, default = None, help = 'do nothing, just to deal with the invalid input args from jupyter notebook') 
 
     mode_group = parser.add_argument_group(title='mode options')
@@ -55,6 +58,7 @@ def parse_args(input_args=None):
     mode_group.add_argument('--new_training',type = bool,default = False, help='learning centermap only in first few iterations for stable training.')
     mode_group.add_argument('--perspective_proj',type = bool,default = False,help = 'whether to use perspective projection, else use orthentic projection.')
     mode_group.add_argument('--FOV',type = float,default = 60, help = 'The camera field of view (eular angle) used for visualization')
+    mode_group.add_argument('--focal_length',type=float, default = 443.4, help = 'Default focal length, adopted from JTA dataset')
 
     train_group = parser.add_argument_group(title='training options')
     # basic training settings
@@ -170,6 +174,8 @@ def parse_args(input_args=None):
     smpl_group.add_argument('--smpl_uvmap',type = str,default = os.path.join(model_dir, 'parameters', 'smpl_vt_ft.npz'),help = 'smpl UV Map coordinates for each vertice')
     smpl_group.add_argument('--wardrobe', type = str, default=os.path.join(model_dir, 'wardrobe'), help = 'path of smpl UV textures')
     smpl_group.add_argument('--mesh_cloth',type = str,default = '031',help = 'pick up cloth from the wardrobe or simplely use a single color')
+
+    smpl_group.add_argument('--nvxia_model_path',type = str,default = os.path.join(model_dir, 'characters','nvxia'),help = 'path to nvxia model')
 
     debug_group = parser.add_argument_group(title='Debug options')
     debug_group.add_argument('--track_memory_usage',type = bool,default = False)

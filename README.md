@@ -1,7 +1,5 @@
 <h1 align="center"> 
-  <p float="center">
   <img src="../assets/demo/ROMP_logo.png" width="20%" />
-  </p> 
 </h1>
 <h2 align="center"> Monocular, One-stage, Regression of Multiple 3D People </h2>
 
@@ -54,9 +52,10 @@ Contact: [yusun@stu.hit.edu.cn](mailto:yusun@stu.hit.edu.cn). Feel free to conta
  - Convenient API for 2D / 3D visualization, parsed datasets.  
 
 ## News
+*2021/12/23: Add [Training guidance](https://github.com/Arthur151/ROMP/blob/master/docs/train.md#training-guidance).*   
+*2021/12/20: Upgrade the Pytorch to 1.10.0, Pytorch3D to 0.6.1.*  
+*2021/12/2: Add optional renderers (pyrender or pytorch3D). Fix some bugs reported in issues.*  
 ✨✨*2021/10/10: V1.1 released, including multi-person webcam, extracting , webcam temporal optimization, live blender character animation, interactive visualization.*  Let's try!  
-*2021/9/13: Low FPS / args parsing bugs are fixed. Support calling as a python lib.*   
-*2021/9/10: Training code release. API optimization.*    
 [Old logs](docs/updates.md)
 
 ## Getting started
@@ -98,6 +97,8 @@ For interactive visualization, please run
 ```bash
 python -m romp.predict.image --inputs=demo/images --output_dir=demo/image_results --show_mesh_stand_on_image  --interactive_vis
 ```
+
+**Caution**: To use `show_mesh_stand_on_image` and `interactive_vis`, you must run ROMP on a computer with visual desktop to support the rendering. Most remote servers without visual desktop is not supported. Please use `save_visualization_on_img` instead.
 
 Here, we show an example of calling ROMP as a python lib to process images.
 <details>
@@ -196,7 +197,7 @@ Please refer to [expert.md](docs/export.md) to export the results to fbx files f
 
 ### Train
 
-Please prepare the training datasets following [dataset.md](docs/dataset.md), and then refer to [train.md](docs/train.md) for training.
+Please prepare the training datasets following [dataset.md](docs/dataset.md), and then refer to [train.md](docs/train.md) for training. 
 
 ### Evaluation
 
@@ -236,6 +237,6 @@ Here are some great resources we benefit:
 - SMPL models and layer is borrowed from MPII [SMPL-X model](https://github.com/vchoutas/smplx).
 - Some functions are borrowed from [HMR-pytorch](https://github.com/MandyMo/pytorch_HMR) and [SPIN](https://github.com/nkolot/SPIN).
 - The evaluation code and GT annotations of 3DPW dataset is brought from [3dpw-eval](https://github.com/aymenmir1/3dpw-eval) and [VIBE](https://github.com/mkocabas/VIBE).
-- 3D mesh visualization is supported by [vedo](https://github.com/marcomusy/vedo), [EasyMocap](https://github.com/zju3dv/EasyMocap), [minimal-hand](https://github.com/CalciferZh/minimal-hand) and [Open3D]( https://github.com/intel-isl/Open3D).
+- 3D mesh visualization is supported by [vedo](https://github.com/marcomusy/vedo), [EasyMocap](https://github.com/zju3dv/EasyMocap), [minimal-hand](https://github.com/CalciferZh/minimal-hand), [Open3D](https://github.com/intel-isl/Open3D), and [Pyrender](https://github.com/mmatl/pyrender).
 
 Please consider citing their papers.

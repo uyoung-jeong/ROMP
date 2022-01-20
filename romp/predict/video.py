@@ -129,7 +129,14 @@ class Video_processor(Image_processor):
                 save_result_dict_tonpz(results, self.output_dir)
                 
             if self.show_mesh_stand_on_image:
-                stand_on_imgs = visualizer.plot_multi_meshes_batch(outputs['verts'], outputs['params']['cam'], outputs['meta_data'], outputs['reorganize_idx'].cpu().numpy())
+                poses = []
+                for frame_id in sorted(list(results_track.keys())):
+                    for result in results_track[frame_id]:
+                        poses.append(result['poses'])
+                pose = np.array(poses)
+                verts = self.character_model(pose)['verts'] if self.character == 'nvxia' else outputs['verts']
+                stand_on_imgs = visualizer.plot_multi_meshes_batch(verts, outputs['params']['cam'], outputs['meta_data'], \
+                    outputs['reorganize_idx'].cpu().numpy(), interactive_show=self.interactive_vis)
                 stand_on_imgs_frames += stand_on_imgs
 
             if self.save_visualization_on_img:
@@ -139,10 +146,11 @@ class Video_processor(Image_processor):
                 results_dict, img_names = self.visualizer.visulize_result(outputs, outputs['meta_data'], \
                     show_items=show_items_list, vis_cfg={'settings':['put_org']}, save2html=False)
 
-                for img_name, mesh_rendering_orgimg in zip(img_names, results_dict['mesh_rendering_orgimgs']['figs']):
-                    save_name = os.path.join(self.output_dir, os.path.basename(img_name))
-                    cv2.imwrite(save_name, cv2.cvtColor(mesh_rendering_orgimg, cv2.COLOR_RGB2BGR))
-                    save_frame_list.append(save_name)
+                if 'mesh_rendering_orgimgs' in results_dict:
+                    for img_name, mesh_rendering_orgimg in zip(img_names, results_dict['mesh_rendering_orgimgs']['figs']):
+                        save_name = os.path.join(self.output_dir, os.path.basename(img_name))
+                        cv2.imwrite(save_name, cv2.cvtColor(mesh_rendering_orgimg, cv2.COLOR_RGB2BGR))
+                        save_frame_list.append(save_name)
                 del results_dict
 
             if self.save_mesh:
